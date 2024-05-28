@@ -125,10 +125,10 @@ p3F0b=1-p3F0
 
 dummyCol1,tcol2=st.columns(2)
 with dummyCol1:
-    st.image("rink.png")
+    st.image("rink.PNG")
 with tcol2:
 
-    st.image("cp.png")
+    st.image("cp.PNG")
 
 
 st.markdown("---")
