@@ -139,10 +139,10 @@ st.text("NOTE: Bubble Size = TOI \n Color = +/-")
 dummyCol1,tcol2=st.columns(2,gap="large")
 with dummyCol1:
     st.markdown("<h4 style='text-align : center; color: maroon;' >COL</h4>",unsafe_allow_html=True) 
-    st.image("colPlayers1.PNG")
+    st.image("colPlayers1.png")
 with tcol2:
     st.markdown("<h4 style='text-align : center; color: green;' >DAL</h4>",unsafe_allow_html=True)
-    st.image("dalPlayers1.PNG")
+    st.image("dalPlayers1.png")
 
 
 
