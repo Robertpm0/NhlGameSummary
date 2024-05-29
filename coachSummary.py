@@ -8,7 +8,7 @@ def TimeConvert(word):
     return int(words[0])*60+int(words[1])
     
 #st.title("AVL @ DAL 5/15/2024")
-st.markdown("<h1 style='text-align : center; color: black;' > AVL @ DAL 5/15/2024</h1>",unsafe_allow_html=True)
+st.markdown("<h1 style='text-align : center;' > AVL @ DAL 5/15/2024</h1>",unsafe_allow_html=True)
 st.markdown("<h2 style='text-align : center; color: black;' > 2024 NHL Playoffs Game 5</h2>",unsafe_allow_html=True)
 st.markdown("<h3 style='text-align : center; color: black;' > Final: 5 - 3</h3>",unsafe_allow_html=True)
 st.markdown("<h6 style='text-align : center; color: black;' > SOG: 27 - 26</h6>",unsafe_allow_html=True)
