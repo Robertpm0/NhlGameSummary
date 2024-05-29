@@ -135,7 +135,7 @@ st.markdown("---")
 st.markdown("<h5 style='text-align : center;  ' >Team Analysis</h5>",unsafe_allow_html=True)
 st.markdown("<h6 style='text-align : center;  ' >SAT Dif vs Hits per Player</h6>",unsafe_allow_html=True)
 
-st.text("NOTE: Bubble Size = TOI \n Color = +/-")
+st.text("NOTE: Bubble Size = TOI \n Color = +/- \n SAT Dif = Shot Attempts For minus Shot Attemps Against")
 dummyCol1,tcol2=st.columns(2,gap="large")
 with dummyCol1:
     st.markdown("<h4 style='text-align : center; color: maroon;' >COL</h4>",unsafe_allow_html=True) 
