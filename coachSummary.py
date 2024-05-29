@@ -14,7 +14,7 @@ st.markdown("<h3 style='text-align : center;  ' > Final: 5 - 3</h3>",unsafe_allo
 st.markdown("<h6 style='text-align : center;  ' > SOG: 27 - 26</h6>",unsafe_allow_html=True)
 
 st.markdown("---")
-st.markdown("<h6 style='text-align : center;  ' > Goal Map - TimeLine</h6>",unsafe_allow_html=True)
+st.markdown("<h6 style='text-align : center;  ' > Goal Map - Time Line</h6>",unsafe_allow_html=True)
 req=requests.get("https://api-web.nhle.com/v1/gamecenter/2023030235/play-by-play").json()
 plays=req["plays"]
 percentMap={1:[],2:[],3:[]}
@@ -135,7 +135,7 @@ st.markdown("---")
 st.markdown("<h5 style='text-align : center;  ' >Team Analysis</h5>",unsafe_allow_html=True)
 st.markdown("<h6 style='text-align : center;  ' >SAT Dif vs Hits per Player</h6>",unsafe_allow_html=True)
 
-st.text("NOTE: Bubble Size = TOI \n Color = +/- \n SAT Dif = Shot Attempts For minus Shot Attemps Against")
+st.text("NOTE: Bubble Size = TOI \n Color = +/- \n SAT Dif = Shot Attempts For minus Shot Attempts Against")
 #st.text("SAT Dif = Shot Attempts For minus Shot Attemps Against")
 dummyCol1,tcol2=st.columns(2,gap="large")
 with dummyCol1:
