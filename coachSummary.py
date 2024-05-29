@@ -554,7 +554,7 @@ with fc3:
         </style>
                     
         <div class='column-border'>
-            Power Play 
+            Power Play %
                      <br />
                     <div class='dd'>
                     <strong>
