@@ -1,21 +1,27 @@
 import requests
 import streamlit as st
 
+
+
+# more content on screen per row
 st.set_page_config(layout="wide")
+
+# converts string time to integers
 def TimeConvert(word):
     words=word.split(":")
     print(int(words[0])*60+int(words[1]))
     return int(words[0])*60+int(words[1])
     
 #st.title("AVL @ DAL 5/15/2024")
-st.markdown("<h1 style='text-align : center;' > AVL @ DAL 5/15/2024</h1>",unsafe_allow_html=True)
-st.markdown("<h2 style='text-align : center;  ' > 2024 NHL Playoffs Game 5</h2>",unsafe_allow_html=True)
-st.markdown("<h3 style='text-align : center;  ' > Final: 5 - 3</h3>",unsafe_allow_html=True)
-st.markdown("<h6 style='text-align : center;  ' > SOG: 27 - 26</h6>",unsafe_allow_html=True)
+# adding title and general stats from the game
+st.markdown("<h1 style='text-align : center; color: black;' > AVL @ DAL 5/15/2024</h1>",unsafe_allow_html=True)
+st.markdown("<h2 style='text-align : center; color: black;' > 2024 NHL Playoffs Game 5</h2>",unsafe_allow_html=True)
+st.markdown("<h3 style='text-align : center; color: black;' > Final: 5 - 3</h3>",unsafe_allow_html=True)
+st.markdown("<h6 style='text-align : center; color: black;' > SOG: 27 - 26</h6>",unsafe_allow_html=True)
 
 st.markdown("---")
-st.markdown("<h6 style='text-align : center;  ' > Goal Map - Time Line</h6>",unsafe_allow_html=True)
-req=requests.get("https://api-web.nhle.com/v1/gamecenter/2023030235/play-by-play").json()
+st.markdown("<h6 style='text-align : center; color: black;' > Goal Map - TimeLine</h6>",unsafe_allow_html=True)
+req=requests.get("https://api-web.nhle.com/v1/gamecenter/2023030235/play-by-play").json() # getting specific data from the game # via nhl api
 plays=req["plays"]
 percentMap={1:[],2:[],3:[]}
 win1=0
@@ -26,7 +32,7 @@ currFoTime=0
 dalFo=[]
 colFo=[]
 for play in plays:
-    if play["typeDescKey"]=="goal":
+    if play["typeDescKey"]=="goal": # get goals and ge ttheir time in the game
         print(play)
         if play["details"]["eventOwnerTeamId"]==21:
             colFo.append(TimeConvert(play["timeInPeriod"])-TimeConvert(currFoTime))
@@ -34,7 +40,7 @@ for play in plays:
             dalFo.append(TimeConvert(play["timeInPeriod"])-TimeConvert(currFoTime))
 
 
-    elif play["typeDescKey"]=="faceoff":
+    elif play["typeDescKey"]=="faceoff": # count number of face off wins per team
         currFoTime=play["timeInPeriod"]
 
         if play["periodDescriptor"]["number"]>per:
@@ -43,14 +49,14 @@ for play in plays:
             win1=win2=0
             per+=1 
 
-        if play["details"]["eventOwnerTeamId"]==21:
+        if play["details"]["eventOwnerTeamId"]==21: # determing which team got the fo win
             win1+=1
         else:
             win2+=1 
-percentMap[per].append(win1)
+percentMap[per].append(win1) # tracking the face off stats with a map / dict
 percentMap[per].append(win2)
 
-    
+# calculating final percentages for each team wi n/ loss     
 p1F0=round(percentMap[1][0]/(percentMap[1][0]+percentMap[1][1]),2)
 p1F0b=round(1-p1F0,2)
 p2F0=round(percentMap[2][0]/(percentMap[2][0]+percentMap[2][1]),2)
@@ -58,7 +64,10 @@ p2F0b=round(1-p2F0,2)
 p3F0=round(percentMap[3][0]/(percentMap[3][0]+percentMap[3][1]),2)
 p3F0b=1-p3F0
 
-# '''
+
+# how i made the on ice goal charts
+
+
 # req=requests.get("https://api-web.nhle.com/v1/gamecenter/2023030235/play-by-play").json()
 # plays=req["plays"]
 # goalX=[]
@@ -121,32 +130,35 @@ p3F0b=1-p3F0
 # rink.plot_fn(sns.scatterplot, x="x", y="y", hue="event_team", s=20, legend=False, data=first_period, ax=axs, palette=team_colors)
 
 # st.pyplot(plt)
-# '''
 
+
+
+
+
+# showing some pre made charts I made 
 dummyCol1,tcol2=st.columns(2)
 with dummyCol1:
-    st.image("rink.PNG")
+    st.image("rink.png")
 with tcol2:
 
-    st.image("cp.PNG")
+    st.image("cp.png")
 
-
+# displaying the next section
 st.markdown("---")
-st.markdown("<h5 style='text-align : center;  ' >Team Analysis</h5>",unsafe_allow_html=True)
-st.markdown("<h6 style='text-align : center;  ' >SAT Dif vs Hits per Player</h6>",unsafe_allow_html=True)
-
-st.text("NOTE: Bubble Size = TOI \n Color = +/- \n SAT Dif = Shot Attempts For minus Shot Attempts Against")
-#st.text("SAT Dif = Shot Attempts For minus Shot Attemps Against")
+st.markdown("<h5 style='text-align : center; color: black;' >Team Analysis</h5>",unsafe_allow_html=True)
+st.markdown("<h6 style='text-align : center; color: black;' >SAT Dif vs Hits per Player</h6>",unsafe_allow_html=True)
+# player performance chart
+st.text("NOTE: Bubble Size = TOI \n Color = +/-")
 dummyCol1,tcol2=st.columns(2,gap="large")
 with dummyCol1:
     st.markdown("<h4 style='text-align : center; color: maroon;' >COL</h4>",unsafe_allow_html=True) 
-    st.image("colPlayers1.png")
+    st.image("colPlayers1.PNG")
 with tcol2:
     st.markdown("<h4 style='text-align : center; color: green;' >DAL</h4>",unsafe_allow_html=True)
-    st.image("dalPlayers1.png")
+    st.image("dalPlayers1.PNG")
 
 
-
+# time line chart I made
 # '''
 # fig,ax=plt.subplots(figsize=(2,1),layout="constrained")
 # #plt.xticks([20*60,40*60],["2nd Per","3rd Per"])
@@ -168,20 +180,16 @@ with tcol2:
 # st.pyplot(plt)
 # '''
 
-st.markdown("<h3 style='text-align : center;  ' >Top Lines</h3>",unsafe_allow_html=True)
+st.markdown("<h3 style='text-align : center; color: black;' >Top Lines</h3>",unsafe_allow_html=True)
 col1, col2 = st.columns(2,gap="small")
-        #st.text("TOI  GF  GA  Shots  Blocks \n13:22 2  1    17       1")
 
-
+# creating a grid
 with col1:
 
     st.markdown("<h4 style='text-align : center; color: maroon;' >COL</h4>",unsafe_allow_html=True)
     subCol1,subCol2=st.columns(2,gap="small")
     with subCol1:
 
-      #  st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-       # st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
         st.markdown("""
         <style>
         .column-border1 {
@@ -213,16 +221,8 @@ with col1:
                     </div>
         </div>
         """, unsafe_allow_html=True)
-        #st.text("TOI  GF  GA  Shots  Blocks \n13:22 2  1    17       1")
-      #  ColDf=pd.DataFrame({"TOI":["13:22"],"GF":[2],"GA":[1],"Shots":[17],"Blocks":[1]})
-       # st.table(ColDf)
-    with subCol2:
-        #st.markdown("<h7 style='text-align : center;  ' >Defense</h7>",unsafe_allow_html=True)
-        #st.markdown("Toews-Makar")
-       # st.text("TOI  GF  GA  Blocks  Shots \n16:05 1  1    2       24")
-       # st.markdown("__TOI &nbsp; &nbsp; GF  GA  Shots  Blocks__   <br />      16:05 &nbsp; 1 &nbsp;  1 &nbsp; &nbsp;  24 &nbsp; &nbsp; 2",unsafe_allow_html=True)
 
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      16:05 &nbsp; 1 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 24 &nbsp; &nbsp; &nbsp; &nbsp; 2",unsafe_allow_html=True)
+    with subCol2:
         st.markdown("""
         <style>
         .column-border {
@@ -260,12 +260,7 @@ with col2:
 
     subCol1,subCol2=st.columns(2,gap="small")
     with subCol1:
-        #st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-        #st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
-        #st.text("TOI  GF  GA  Shots  Blocks \n13:22 2  1    17       1")
-      #  ColDf=pd.DataFrame({"TOI":["13:22"],"GF":[2],"GA":[1],"Shots":[17],"Blocks":[1]})
-       # st.table(ColDf)
+
         st.markdown("""
         <style>
         .column-border2 {
@@ -300,13 +295,7 @@ with col2:
 
 
     with subCol2:
-       # st.markdown("<h7 style='text-align : center;  ' >Defense</h7>",unsafe_allow_html=True)
-       # st.text("Toews-Makar")
-       # st.text("TOI  GF  GA  Blocks  Shots \n16:05 1  1    2       24")
-       # st.markdown("__TOI &nbsp; &nbsp; GF  GA  Shots  Blocks__   <br />      16:05 &nbsp; 1 &nbsp;  1 &nbsp; &nbsp;  24 &nbsp; &nbsp; 2",unsafe_allow_html=True)
 
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      16:05 &nbsp; 1 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 24 &nbsp; &nbsp; &nbsp; &nbsp; 2",unsafe_allow_html=True)
-        #st.text("TOI  GF  GA  Shots  Blocks \n13:22 2  1    17       1")
         st.markdown("""
         <style>
         .column-border {
@@ -338,58 +327,58 @@ with col2:
         </div>
         """, unsafe_allow_html=True)
 
-
+# plotting a bunch of stats in the grid / table
 st.markdown("---")
-st.markdown("<h3 style='text-align : center;  ' >Game Stats</h3>",unsafe_allow_html=True)
+st.markdown("<h3 style='text-align : center; color: black;' >Game Stats</h3>",unsafe_allow_html=True)
 c1,c2,c3=st.columns([3,1,3])
 with c1:
     st.markdown("<h5 style='text-align : center; color: maroon;' >COL</h5>",unsafe_allow_html=True)
     s1,s2,s3,s4=st.columns(4)
     with s1:
-        st.markdown(f'''<p style='text-align : center;  ' ><strong>P1</strong></p> <br/> <p style='text-align : center;  ' >1</p> <br /> 
-<p style='text-align : center;  ' >9</p>
+        st.markdown(f'''<p style='text-align : center; color: black;' ><strong>P1</strong></p> <br/> <p style='text-align : center; color: black;' >1</p> <br /> 
+<p style='text-align : center; color: black;' >9</p>
 <br />
-<p style='text-align : center;  ' >13</p> <br />
-    <p style='text-align : center;  ' >{p1F0}</p><br />
-    <p style='text-align : center;  ' >3 </p><br />
-    <p style='text-align : center;  ' > 3</p><br />
-    <p style='text-align : center;  ' > 2</p>
+<p style='text-align : center; color: black;' >13</p> <br />
+    <p style='text-align : center; color: black;' >{p1F0}</p><br />
+    <p style='text-align : center; color: black;' >3 </p><br />
+    <p style='text-align : center; color: black;' > 3</p><br />
+    <p style='text-align : center; color: black;' > 2</p>
                                         ''',
                     unsafe_allow_html=True)
     with s2:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  ' ><strong>P2</strong></p> <br/> <p style='text-align : center;  ' >1</p> <br /> 
-<p style='text-align : center;  ' >10</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;' ><strong>P2</strong></p> <br/> <p style='text-align : center; color: black;' >1</p> <br /> 
+<p style='text-align : center; color: black;' >10</p>
 <br />
-<p style='text-align : center;  ' >16</p> <br />
-    <p style='text-align : center;  ' >{p2F0}</p><br />
-    <p style='text-align : center;  ' >2 </p><br />
-    <p style='text-align : center;  ' > 2</p><br />
-    <p style='text-align : center;  ' > 2</p></div>
+<p style='text-align : center; color: black;' >16</p> <br />
+    <p style='text-align : center; color: black;' >{p2F0}</p><br />
+    <p style='text-align : center; color: black;' >2 </p><br />
+    <p style='text-align : center; color: black;' > 2</p><br />
+    <p style='text-align : center; color: black;' > 2</p></div>
                                         ''',
                     unsafe_allow_html=True)
        # Hits 16 ,block 3
 
     with s3:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  ' ><strong>P3</strong></p> <br/> <p style='text-align : center;  ' >3</p> <br /> 
-<p style='text-align : center;  ' >8</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;' ><strong>P3</strong></p> <br/> <p style='text-align : center; color: black;' >3</p> <br /> 
+<p style='text-align : center; color: black;' >8</p>
 <br />
-<p style='text-align : center;  ' >7</p> <br />
-    <p style='text-align : center;  ' >{p3F0}</p><br />
-    <p style='text-align : center;  ' >5 </p><br />
-    <p style='text-align : center;  ' > 1</p><br />
-    <p style='text-align : center;  ' > 4</p></div>
+<p style='text-align : center; color: black;' >7</p> <br />
+    <p style='text-align : center; color: black;' >{p3F0}</p><br />
+    <p style='text-align : center; color: black;' >5 </p><br />
+    <p style='text-align : center; color: black;' > 1</p><br />
+    <p style='text-align : center; color: black;' > 4</p></div>
                                         ''',
                     unsafe_allow_html=True)
 # 7, blocks 5
     with s4:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  ' ><strong>TOT</strong></p> <br/> <p style='text-align : center;  ' >5</p> <br /> 
-<p style='text-align : center;  ' >27</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;' ><strong>TOT</strong></p> <br/> <p style='text-align : center; color: black;' >5</p> <br /> 
+<p style='text-align : center; color: black;' >27</p>
 <br />
-<p style='text-align : center;  ' >36</p> <br />
-    <p style='text-align : center;  ' >0.45</p><br />
-    <p style='text-align : center;  ' >10 </p><br />
-    <p style='text-align : center;  ' > 6</p><br />
-    <p style='text-align : center;  ' > 8</p></div>
+<p style='text-align : center; color: black;' >36</p> <br />
+    <p style='text-align : center; color: black;' >0.45</p><br />
+    <p style='text-align : center; color: black;' >10 </p><br />
+    <p style='text-align : center; color: black;' > 6</p><br />
+    <p style='text-align : center; color: black;' > 8</p></div>
                                         ''',
                     unsafe_allow_html=True)
 
@@ -398,7 +387,7 @@ with c2:
 
     st.markdown('''   
                
-        <br />  <div style='border-right: 1px solid; border-left: 1px solid;'><p style='text-align : center; font-weight: bold; '></p><br/>
+        <br />  <div style='border-right: 1px solid; border-left: 1px solid;'><p style='text-align : center; font-weight: bold;color: black;'></p><br/>
         <p style='text-align : center;font-weight: bold; border-bottom: 1px solid;' >  Goals </p><br/>
         <p style='text-align : center;font-weight: bold;border-bottom: 1px solid;' >Shots </p><br />
         <p style='text-align : center;font-weight: bold;border-bottom: 1px solid;' > Hits </p><br />
@@ -412,63 +401,60 @@ with c3:
     st.markdown("<h5 style='text-align : center; color: green;' >DAL</h5>",unsafe_allow_html=True)
     s1,s2,s3,s4=st.columns(4)
     with s1:
-        st.markdown(f'''<p style='text-align : center;  ' ><strong>TOT</strong></p> <br/> <p style='text-align : center;  ' >3</p> <br /> 
-<p style='text-align : center;  ' >26</p>
+        st.markdown(f'''<p style='text-align : center; color: black;' ><strong>TOT</strong></p> <br/> <p style='text-align : center; color: black;' >3</p> <br /> 
+<p style='text-align : center; color: black;' >26</p>
 <br />
-<p style='text-align : center;  ' >22</p> <br />
-    <p style='text-align : center;  ' >0.55</p><br />
-    <p style='text-align : center;  ' >17</p><br />
-    <p style='text-align : center;  ' >7</p><br />
-    <p style='text-align : center;  ' >10</p>
+<p style='text-align : center; color: black;' >22</p> <br />
+    <p style='text-align : center; color: black;' >0.55</p><br />
+    <p style='text-align : center; color: black;' >17</p><br />
+    <p style='text-align : center; color: black;' >7</p><br />
+    <p style='text-align : center; color: black;' >10</p>
                                         ''',
                     unsafe_allow_html=True)
     with s2:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  ' ><strong>P3</strong></p> <br/> <p style='text-align : center;  ' >1</p> <br /> 
-<p style='text-align : center;  ' >10</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;' ><strong>P3</strong></p> <br/> <p style='text-align : center; color: black;' >1</p> <br /> 
+<p style='text-align : center; color: black;' >10</p>
 <br />
-<p style='text-align : center;  ' >10</p> <br />
-    <p style='text-align : center;  ' >{p3F0b}</p><br />
-    <p style='text-align : center;  ' >7</p><br />
-    <p style='text-align : center;  ' >3</p><br />
-    <p style='text-align : center;  ' >2</p></div>
+<p style='text-align : center; color: black;' >10</p> <br />
+    <p style='text-align : center; color: black;' >{p3F0b}</p><br />
+    <p style='text-align : center; color: black;' >7</p><br />
+    <p style='text-align : center; color: black;' >3</p><br />
+    <p style='text-align : center; color: black;' >2</p></div>
                                         ''',
                     unsafe_allow_html=True)
     with s3:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  '> <strong>P2</strong></p> <br/> <p style='text-align : center;  ' >1</p> <br /> 
-<p style='text-align : center;  ' >8</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;'> <strong>P2</strong></p> <br/> <p style='text-align : center; color: black;' >1</p> <br /> 
+<p style='text-align : center; color: black;' >8</p>
 <br />
-<p style='text-align : center;  ' >8</p> <br />
-    <p style='text-align : center;  ' >{p2F0b}</p><br />
-    <p style='text-align : center;  ' >6 </p><br />
-    <p style='text-align : center;  ' >2</p><br />
-    <p style='text-align : center;  ' >5</p></div>
+<p style='text-align : center; color: black;' >8</p> <br />
+    <p style='text-align : center; color: black;' >{p2F0b}</p><br />
+    <p style='text-align : center; color: black;' >6 </p><br />
+    <p style='text-align : center; color: black;' >2</p><br />
+    <p style='text-align : center; color: black;' >5</p></div>
                                         ''',
                     unsafe_allow_html=True)        # 2 gives
     with s4:
-        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center;  ' ><strong>P1</strong></p> <br/> <p style='text-align : center;  ' >1</p> <br /> 
-<p style='text-align : center;  ' >8</p>
+        st.markdown(f'''<div style='border-left: 1px solid;'><p style='text-align : center; color: black;' ><strong>P1</strong></p> <br/> <p style='text-align : center; color: black;' >1</p> <br /> 
+<p style='text-align : center; color: black;' >8</p>
 <br />
-<p style='text-align : center;  ' >4</p> <br />
-    <p style='text-align : center;  ' >{p1F0b}</p><br />
-    <p style='text-align : center;  ' >2</p><br />
-    <p style='text-align : center;  ' >2</p><br />
-    <p style='text-align : center;  ' >3</p></div>
+<p style='text-align : center; color: black;' >4</p> <br />
+    <p style='text-align : center; color: black;' >{p1F0b}</p><br />
+    <p style='text-align : center; color: black;' >2</p><br />
+    <p style='text-align : center; color: black;' >2</p><br />
+    <p style='text-align : center; color: black;' >3</p></div>
                                         ''',
                     unsafe_allow_html=True)
 
 
 
 st.markdown("---")
-st.markdown("<h6 style='text-align : center;  ' >Misc Stats</h6>",unsafe_allow_html=True)
+st.markdown("<h6 style='text-align : center; color: black;' >Misc Stats</h6>",unsafe_allow_html=True)
 
 fc1,fc2,fc3,fc4=st.columns(4)
 
 
 with fc1:
 
-      #  st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-       # st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
         st.markdown("""
         <style>
         .column-border {
@@ -498,10 +484,6 @@ with fc1:
         </div>
         """, unsafe_allow_html=True)
 with fc2:
-
-      #  st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-       # st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
         st.markdown("""
         <style>
         .column-border {
@@ -536,9 +518,6 @@ with fc2:
 
 with fc3:
 
-      #  st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-       # st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
         st.markdown("""
         <style>
         .column-border {
@@ -555,7 +534,7 @@ with fc3:
         </style>
                     
         <div class='column-border'>
-            Power Play %
+            Power Play 
                      <br />
                     <div class='dd'>
                     <strong>
@@ -569,10 +548,6 @@ with fc3:
         """, unsafe_allow_html=True)
 
 with fc4:
-
-      #  st.markdown("<h7 style='text-align : center;  ' >Forwards</h7>",unsafe_allow_html=True)
-       # st.markdown("Drouin-Mackinnon-Lehkonen")
-        #st.markdown("__TOI &nbsp; &nbsp; GF &nbsp; GA  &nbsp; Shots &nbsp;  Blocks__   <br />      13:22 &nbsp; 2 &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; 17 &nbsp; &nbsp; &nbsp; &nbsp; 1",unsafe_allow_html=True)
         st.markdown("""
         <style>
         .column-border {
@@ -603,13 +578,4 @@ with fc4:
                     </div>
         </div>
         """, unsafe_allow_html=True)
-        # htis 4,8, 10
-        #blocks 7,6,4
-#cum stats
-#  Faceoffs
-#  powerplay %
-#     avg time after f0 goal
 
-
-
-#df = px.data.gapminder()
