@@ -1,7 +1,12 @@
 # NhlGameSummary
 made with streamlit and nhl api
 
-some data is hard coded and will be dynamic in the future
+some data is hard coded and others is imported fron the  nhl api
 
 
-charts are statically loaded for the time being
+# How to Run:
+
+ - fork repo
+ - run the below command from the root of the forked directoy
+ - python -m streamlit run coachSummary.py
+
