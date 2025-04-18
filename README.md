@@ -1,7 +1,8 @@
 # NhlGameSummary
-made with streamlit and nhl api
-
-some data is hard coded and others is imported fron the  nhl api
+Made with streamlit and nhl api
+This is an NHL playoff Game from the 2023/2024 season made with streamlit
+# Note
+Some data is hard coded and others is imported fron the  nhl api
 
 
 # How to Run:
